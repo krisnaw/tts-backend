@@ -5,7 +5,11 @@ import {users} from "@/db/schema";
 import * as HttpStatusCodes from "stoker/http-status-codes";
 import bcrypt from "bcrypt"
 import * as HttpStatusPhrases from "stoker/http-status-phrases";
-import {varchar} from "drizzle-orm/pg-core";
+import { jwt, sign } from 'hono/jwt'
+
+
+const JWT_SECRET = 'secret'; // Replace with a strong, random secret
+const EXP = Math.floor(Date.now() / 1000) + 60 * 5
 
 export const list: AppRouteHandler<ListRoute> = async (c) => {
   const users = await db.query.users.findMany();
@@ -66,6 +70,14 @@ export const login: AppRouteHandler<LoginRoute> = async (c) => {
   }
 
 
+  const payload = {
+    sub: user.email,
+    role: 'user',
+    exp: EXP,
+  }
 
-  return c.json()
+  // Sign the JWT with the secret key
+  const token = await sign(payload, JWT_SECRET)
+
+  return c.json(token, HttpStatusCodes.OK)
 }
