@@ -8,6 +8,20 @@
       "when": 1753692211185,
       "tag": "0000_ambiguous_phil_sheldon",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1753702788593,
+      "tag": "0001_complete_salo",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1753702929504,
+      "tag": "0002_glorious_sentinels",
+      "breakpoints": true
     }
   ]
 }
