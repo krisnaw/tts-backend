@@ -6,6 +6,10 @@ import {jsonContent, jsonContentRequired} from "stoker/openapi/helpers";
 import {createErrorSchema} from "stoker/openapi/schemas";
 const tags = ["Auth"];
 
+const loginResponseSchema = z.object({
+  token: z.string(),
+});
+
 export const list = createRoute({
   path: "/users",
   method: "get",
@@ -52,11 +56,11 @@ export const login= createRoute({
   },
   responses: {
     [HttpStatusCodes.OK]: jsonContent(
-        selectUsersSchema,
-        "Success, user created"
+        loginResponseSchema,
+        "Login success"
     ),
     [HttpStatusCodes.UNPROCESSABLE_ENTITY]: jsonContent(
-        createErrorSchema(insertUsersSchema),
+        createErrorSchema(loginUserSchema),
         "The validation error(s)",
     ),
   }

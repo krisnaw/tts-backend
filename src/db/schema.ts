@@ -27,3 +27,17 @@ export const insertUsersSchema = createInsertSchema(users)
     })
 
 export const loginUserSchema = insertUsersSchema.partial()
+    .omit({
+      name: true,
+    })
+    .required({
+      email: true,
+      password: true
+    })
+
+export const recorder = pgTable("recorder", {
+  id: integer().primaryKey().generatedAlwaysAsIdentity(),
+  content: text().notNull(),
+  createdAt: timestamp().defaultNow(),
+  updatedAt: timestamp().defaultNow()
+})
