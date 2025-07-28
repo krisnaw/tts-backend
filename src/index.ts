@@ -1,5 +1,4 @@
 import { serve } from '@hono/node-server'
-import {handle} from '@hono/node-server/vercel'
 import { Hono } from 'hono'
 
 const app = new Hono()
@@ -14,6 +13,3 @@ serve({
 }, (info) => {
   console.log(`Server is running on http://localhost:${info.port}`)
 })
-
-
-export default handle(app)
