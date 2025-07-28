@@ -7,10 +7,6 @@ import {createErrorSchema} from "stoker/openapi/schemas";
 const tags = ["Auth"];
 import { notFoundSchema } from "@/lib/constants";
 
-const loginResponseSchema = z.object({
-  token: z.string(),
-});
-
 export const list = createRoute({
   path: "/users",
   method: "get",
@@ -30,13 +26,13 @@ export const register = createRoute({
   request: {
     body: jsonContentRequired(
         insertUsersSchema,
-        "Success, user created",
+        "Create user",
     ),
   },
   responses: {
     [HttpStatusCodes.OK]: jsonContent(
         selectUsersSchema,
-        "Success, user created"
+        "User found"
     ),
     [HttpStatusCodes.UNPROCESSABLE_ENTITY]: jsonContent(
         createErrorSchema(insertUsersSchema),
