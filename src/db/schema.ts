@@ -25,3 +25,5 @@ export const insertUsersSchema = createInsertSchema(users)
       createdAt: true,
       updatedAt: true,
     })
+
+export const loginUserSchema = insertUsersSchema.partial()
