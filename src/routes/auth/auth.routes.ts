@@ -5,6 +5,7 @@ import * as HttpStatusCodes from "stoker/http-status-codes";
 import {jsonContent, jsonContentRequired} from "stoker/openapi/helpers";
 import {createErrorSchema} from "stoker/openapi/schemas";
 const tags = ["Auth"];
+import { notFoundSchema } from "@/lib/constants";
 
 const loginResponseSchema = z.object({
   token: z.string(),
@@ -56,12 +57,16 @@ export const login= createRoute({
   },
   responses: {
     [HttpStatusCodes.OK]: jsonContent(
-        loginResponseSchema,
+        z.object({token: z.string()}),
         "Login success"
     ),
     [HttpStatusCodes.UNPROCESSABLE_ENTITY]: jsonContent(
         createErrorSchema(loginUserSchema),
         "The validation error(s)",
+    ),
+    [HttpStatusCodes.NOT_FOUND]: jsonContent(
+        notFoundSchema,
+        "Task not found",
     ),
   }
 })

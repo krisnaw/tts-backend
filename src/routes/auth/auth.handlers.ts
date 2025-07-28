@@ -7,11 +7,8 @@ import bcrypt from "bcrypt"
 import * as HttpStatusPhrases from "stoker/http-status-phrases";
 import {sign} from 'hono/jwt'
 import {eq} from "drizzle-orm";
-import {z} from "zod";
 
 const JWT_SECRET = 'secret'; // Replace with a strong, random secret
-const EXP = Math.floor(Date.now() / 1000) + 60 * 5
-
 
 
 export const list: AppRouteHandler<ListRoute> = async (c) => {
@@ -36,15 +33,6 @@ export const register: AppRouteHandler<RegisterRoute> = async (c) => {
 export const login: AppRouteHandler<LoginRoute> = async (c) => {
   const data = c.req.valid("json");
 
-  if (!data.password && !data.email) {
-    return c.json(
-        {
-          message: HttpStatusPhrases.NOT_FOUND,
-        },
-        HttpStatusCodes.NOT_FOUND,
-    );
-  }
-
   const user = await db.query.users.findFirst({
     where(fields, operators) {
       return operators.eq(fields.email, data.email);
@@ -61,8 +49,7 @@ export const login: AppRouteHandler<LoginRoute> = async (c) => {
   }
 
   // Verify password
-  const isPasswordValid = bcrypt.compare(data.password, user.password);
-  console.log(isPasswordValid)
+  const isPasswordValid = await bcrypt.compare(data.password, user.password);
 
   if (!isPasswordValid) {
     return c.json(
@@ -76,7 +63,7 @@ export const login: AppRouteHandler<LoginRoute> = async (c) => {
   const payload = {
     sub: user.email,
     role: 'user',
-    exp: EXP,
+    exp: Math.floor(Date.now() / 1000) + 60 * 5, // 5 minutes
   }
 
   // Sign the JWT with the secret key

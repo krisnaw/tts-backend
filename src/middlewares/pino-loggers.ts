@@ -10,7 +10,7 @@ export function pinoLoggers() {
       pretty()
     ),
     http: {
-      reqId: () => crypto.randomUUID(),
+      referRequestIdKey: crypto.randomUUID().toString()
     },
   });
 }
