@@ -10,7 +10,10 @@ export const users = pgTable("users", {
   updatedAt: timestamp().defaultNow()
 });
 
-export const selectUsersSchema = createSelectSchema(users);
+export const selectUsersSchema = createSelectSchema(users).omit({
+  password: true,
+})
+
 export const insertUsersSchema = createInsertSchema(users)
     .required({
       name: true,

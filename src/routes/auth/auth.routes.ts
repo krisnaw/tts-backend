@@ -40,5 +40,17 @@ export const register = createRoute({
   }
 })
 
+export const login= createRoute({
+  path: "/login",
+  method: "post",
+  tags,
+  request: {
+
+  },
+  responses: {
+  }
+})
+
 export type ListRoute = typeof list;
 export type RegisterRoute = typeof register;
+export type LoginRoute = typeof login;
