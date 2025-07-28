@@ -5,6 +5,7 @@ import * as routes from "./records.routes";
 
 const router = createRouter()
     .openapi(routes.listRecords, handlers.listRecords)
-    .openapi(routes.createRecords, handlers.createRecords)
+    .openapi(routes.create, handlers.createRecords)
+    .openapi(routes.remove, handlers.removeRecords)
 
 export default router;

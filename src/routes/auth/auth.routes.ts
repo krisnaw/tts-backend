@@ -14,7 +14,7 @@ export const list = createRoute({
   responses: {
     [HttpStatusCodes.OK]: jsonContent(
         z.array(selectUsersSchema),
-        "The list of tasks",
+        "The list of users",
     ),
   },
 });
@@ -26,13 +26,13 @@ export const register = createRoute({
   request: {
     body: jsonContentRequired(
         insertUsersSchema,
-        "Create user",
+        "The user to register",
     ),
   },
   responses: {
     [HttpStatusCodes.OK]: jsonContent(
         selectUsersSchema,
-        "User found"
+        "The created user"
     ),
     [HttpStatusCodes.UNPROCESSABLE_ENTITY]: jsonContent(
         createErrorSchema(insertUsersSchema),
@@ -48,7 +48,7 @@ export const login= createRoute({
   request: {
     body: jsonContentRequired(
         loginUserSchema,
-        "Login success",
+        "The user to login",
     ),
   },
   responses: {
