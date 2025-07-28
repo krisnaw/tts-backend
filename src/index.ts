@@ -1,4 +1,4 @@
-import { serve } from '@hono/node-server'
+import { serve } from "@hono/node-server";
 
 import app from "@/app";
 
@@ -7,5 +7,5 @@ console.log(`Server is running on port http://localhost:3000`);
 
 serve({
   fetch: app.fetch,
-  port: 3000
+  port: 3000,
 });
