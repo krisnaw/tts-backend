@@ -1,7 +1,7 @@
-import { jwt } from "hono/jwt";
+import {jwt} from "hono/jwt";
 
-import { JWT_SECRET } from "@/lib/constants";
-import { createRouter } from "@/lib/create-app";
+import {JWT_SECRET} from "@/lib/constants";
+import {createRouter} from "@/lib/create-app";
 
 import * as handlers from "./records.handlers";
 import * as routes from "./records.routes";
@@ -21,8 +21,10 @@ router.openAPIRegistry.registerComponent("securitySchemes", "Bearer", {
   description: "Bearer token authentication using JWT",
 });
 
-router.openapi(routes.listRecords, handlers.listRecords)
-  .openapi(routes.create, handlers.createRecords)
-  .openapi(routes.remove, handlers.removeRecords);
+router
+    .openapi(routes.listRecords, handlers.listRecords)
+    .openapi(routes.getRecordsByUserId, handlers.getRecordByUserId)
+    .openapi(routes.create, handlers.createRecords)
+    .openapi(routes.remove, handlers.removeRecords);
 
 export default router;

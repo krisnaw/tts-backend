@@ -1,14 +1,14 @@
-import { createRoute } from "@hono/zod-openapi";
+import {createRoute} from "@hono/zod-openapi";
 import * as HttpStatusCodes from "stoker/http-status-codes";
-import { jsonContent, jsonContentRequired } from "stoker/openapi/helpers";
-import { createErrorSchema, IdParamsSchema } from "stoker/openapi/schemas";
-import { z } from "zod";
+import {jsonContent, jsonContentRequired} from "stoker/openapi/helpers";
+import {createErrorSchema, IdParamsSchema} from "stoker/openapi/schemas";
+import {z} from "zod";
 
-import { insertRecordsSchema, insertUsersSchema, selectRecordsSchema } from "@/db/schema";
-import { notFoundSchema } from "@/lib/constants";
+import {insertRecordsSchema, insertUsersSchema, selectRecordsSchema} from "@/db/schema";
+import {notFoundSchema} from "@/lib/constants";
 
 const tags = ["Records"];
-const security = [{ BearerAuth: [] }];
+const security = [{BearerAuth: []}];
 
 export const listRecords = createRoute({
   path: "/records",
@@ -17,11 +17,30 @@ export const listRecords = createRoute({
   security,
   responses: {
     [HttpStatusCodes.OK]: jsonContent(
-      z.array(selectRecordsSchema),
-      "List of records",
+        z.array(selectRecordsSchema),
+        "List of records",
     ),
   },
 });
+
+export const getRecordsByUserId = createRoute({
+  path: "/records/{id}",
+  method: "get",
+  tags,
+  request: {
+    params: IdParamsSchema,
+  },
+  responses: {
+    [HttpStatusCodes.OK]: jsonContent(
+        z.array(selectRecordsSchema),
+        "List of records belong to user"
+    ),
+    [HttpStatusCodes.NOT_FOUND]: jsonContent(
+        notFoundSchema,
+        "Record not found",
+    ),
+  }
+})
 
 export const create = createRoute({
   path: "/records",
@@ -30,18 +49,20 @@ export const create = createRoute({
   security,
   request: {
     body: jsonContentRequired(
-      insertRecordsSchema,
-      "Create records",
+        insertRecordsSchema,
+        "Create records",
     ),
   },
   responses: {
     [HttpStatusCodes.OK]: jsonContent(
-      selectRecordsSchema,
-      "Record found",
+        selectRecordsSchema,
+        "Record found",
     ),
     [HttpStatusCodes.UNPROCESSABLE_ENTITY]: jsonContent(
-      createErrorSchema(insertUsersSchema),
-      "The validation error(s)",
+        z.object({
+          message: z.string(),
+        }),
+        "The validation error(s)",
     ),
   },
 });
@@ -59,16 +80,17 @@ export const remove = createRoute({
       description: "Task deleted",
     },
     [HttpStatusCodes.NOT_FOUND]: jsonContent(
-      notFoundSchema,
-      "Record not found",
+        notFoundSchema,
+        "Record not found",
     ),
     [HttpStatusCodes.UNPROCESSABLE_ENTITY]: jsonContent(
-      createErrorSchema(IdParamsSchema),
-      "Invalid id error",
+        createErrorSchema(IdParamsSchema),
+        "Invalid id error",
     ),
   },
 });
 
 export type ListRecordsRoute = typeof listRecords;
+export type GetRecordsByUserIdRoute = typeof getRecordsByUserId;
 export type CreateRecordsRoute = typeof create;
 export type RemoveRecordsRoute = typeof remove;
