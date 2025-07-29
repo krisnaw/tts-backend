@@ -53,7 +53,10 @@ export const login= createRoute({
   },
   responses: {
     [HttpStatusCodes.OK]: jsonContent(
-        z.object({token: z.string()}),
+        z.object({
+          user: selectUsersSchema,
+          token: z.string()
+        }),
         "Login success"
     ),
     [HttpStatusCodes.UNPROCESSABLE_ENTITY]: jsonContent(

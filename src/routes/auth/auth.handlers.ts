@@ -1,16 +1,25 @@
+import bcrypt from "bcrypt";
+import { sign } from "hono/jwt";
+
 import {AppRouteHandler} from "@/lib/types";
 import {ListRoute, LoginRoute, RegisterRoute} from "@/routes/auth/auth.routes";
 import db from "@/db";
-import {users} from "@/db/schema";
+import { users } from "@/db/schema";
+import { JWT_SECRET } from "@/lib/constants";
 import * as HttpStatusCodes from "stoker/http-status-codes";
-import bcrypt from "bcrypt"
 import * as HttpStatusPhrases from "stoker/http-status-phrases";
-import {sign} from 'hono/jwt'
-import {JWT_SECRET} from "@/lib/constants";
 
 
 export const list: AppRouteHandler<ListRoute> = async (c) => {
-  const users = await db.query.users.findMany();
+  const users = await db.query.users.findMany({
+    columns: {
+      id: true,
+      name: true,
+      email: true,
+      createdAt: true,
+      updatedAt: true
+    }
+  })
   return c.json(users);
 };
 
@@ -67,5 +76,13 @@ export const login: AppRouteHandler<LoginRoute> = async (c) => {
   // Sign the JWT with the secret key
   const token = await sign(payload, JWT_SECRET)
 
-  return c.json({token: token}, HttpStatusCodes.OK)
+
+  const { password, ...userWithoutPassword } = user;
+
+  const responses = {
+    user: userWithoutPassword,
+    token: token
+  }
+
+  return c.json(responses, HttpStatusCodes.OK)
 }

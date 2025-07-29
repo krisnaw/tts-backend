@@ -14,7 +14,7 @@ export const users = pgTable("users", {
 export const selectUsersSchema = createSelectSchema(users)
     .omit({
       password: true,
-    })
+    });
 
 export const insertUsersSchema = createInsertSchema(users)
     .required({
@@ -28,7 +28,6 @@ export const insertUsersSchema = createInsertSchema(users)
       updatedAt: true,
     })
 
-export const patchUsersSchema = insertUsersSchema.partial()
 
 export const loginUserSchema = insertUsersSchema.partial()
     .omit({
