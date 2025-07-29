@@ -61,9 +61,9 @@ export const login: AppRouteHandler<LoginRoute> = async (c) => {
   if (!isPasswordValid) {
     return c.json(
         {
-          message: HttpStatusPhrases.NOT_FOUND,
+          message: "Invalid password",
         },
-        HttpStatusCodes.NOT_FOUND,
+        HttpStatusCodes.UNAUTHORIZED,
     );
   }
 
@@ -76,7 +76,7 @@ export const login: AppRouteHandler<LoginRoute> = async (c) => {
   // Sign the JWT with the secret key
   const token = await sign(payload, JWT_SECRET)
 
-
+  // Remove password from the result
   const { password, ...userWithoutPassword } = user;
 
   const responses = {

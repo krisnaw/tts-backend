@@ -41,6 +41,11 @@ export const register = createRoute({
   }
 })
 
+const ErrorSchema = z.object({
+  message: z.string(),
+});
+
+
 export const login= createRoute({
   path: "/login",
   method: "post",
@@ -59,13 +64,19 @@ export const login= createRoute({
         }),
         "Login success"
     ),
+    [HttpStatusCodes.NOT_FOUND]: jsonContent(
+        notFoundSchema,
+        "Not found"
+    ),
+    [HttpStatusCodes.UNAUTHORIZED]: jsonContent(
+        z.object({
+          message: z.string(),
+        }),
+        "Invalid password"
+    ),
     [HttpStatusCodes.UNPROCESSABLE_ENTITY]: jsonContent(
         createErrorSchema(loginUserSchema),
         "The validation error(s)",
-    ),
-    [HttpStatusCodes.NOT_FOUND]: jsonContent(
-        notFoundSchema,
-        "Task not found",
     ),
   }
 })
