@@ -43,10 +43,6 @@ export const register = createRoute({
   },
 });
 
-const ErrorSchema = z.object({
-  message: z.string(),
-});
-
 export const login = createRoute({
   path: "/login",
   method: "post",

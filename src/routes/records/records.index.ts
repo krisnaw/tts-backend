@@ -6,8 +6,6 @@ import { createRouter } from "@/lib/create-app";
 import * as handlers from "./records.handlers";
 import * as routes from "./records.routes";
 
-const security = [{ BearerAuth: [] }];
-
 const router = createRouter();
 
 // Add JWT auth middleware
