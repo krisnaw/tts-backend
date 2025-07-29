@@ -11,7 +11,6 @@ export const ZOD_ERROR_CODES = {
   INVALID_UPDATES: "invalid_updates",
 };
 
-
-export const JWT_SECRET = 'secret'; // Replace with a strong, random secret
+export const JWT_SECRET = "secret"; // Replace with a strong, random secret
 
 export const notFoundSchema = createMessageObjectSchema(HttpStatusPhrases.NOT_FOUND);

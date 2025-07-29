@@ -1,7 +1,7 @@
 import { createRoute } from "@hono/zod-openapi";
+import { z } from "zod";
 
 import { createRouter } from "@/lib/create-app";
-import {z} from "zod";
 
 const MessageSchema = z.object({
   message: z.string().openapi({

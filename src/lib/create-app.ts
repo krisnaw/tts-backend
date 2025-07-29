@@ -1,13 +1,16 @@
 import { OpenAPIHono } from "@hono/zod-openapi";
 import { config } from "dotenv";
-import { expand } from "dotenv-expand";;
-import type { AppBindings, AppOpenAPI } from "./types";
-import {defaultHook} from "stoker/openapi";
-
-expand(config());
+import { expand } from "dotenv-expand";
+import { notFound, onError } from "stoker/middlewares";
+import { defaultHook } from "stoker/openapi";
 
 import { pinoLoggers } from "@/middlewares/pino-loggers";
-import {notFound, onError} from "stoker/middlewares";
+
+import type { AppBindings, AppOpenAPI } from "./types";
+
+;
+
+expand(config());
 
 export function createRouter() {
   return new OpenAPIHono<AppBindings>({
@@ -19,7 +22,7 @@ export function createRouter() {
 export default function createApp() {
   const app = createRouter();
 
-  app.use(pinoLoggers())
+  app.use(pinoLoggers());
 
   app.notFound(notFound);
   app.onError(onError);

@@ -11,7 +11,6 @@ const securitySchemes = {
   },
 } as const;
 
-
 export default function configureOpenAPI(app: AppOpenAPI) {
   app.doc("/doc", {
     openapi: "3.0.0",

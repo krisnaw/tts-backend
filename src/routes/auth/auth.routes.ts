@@ -1,11 +1,13 @@
-import {createRoute} from "@hono/zod-openapi";
-import {z} from "zod";
-import {insertUsersSchema, loginUserSchema, selectUsersSchema} from "@/db/schema";
+import { createRoute } from "@hono/zod-openapi";
 import * as HttpStatusCodes from "stoker/http-status-codes";
-import {jsonContent, jsonContentRequired} from "stoker/openapi/helpers";
-import {createErrorSchema} from "stoker/openapi/schemas";
-const tags = ["Auth"];
+import { jsonContent, jsonContentRequired } from "stoker/openapi/helpers";
+import { createErrorSchema } from "stoker/openapi/schemas";
+import { z } from "zod";
+
+import { insertUsersSchema, loginUserSchema, selectUsersSchema } from "@/db/schema";
 import { notFoundSchema } from "@/lib/constants";
+
+const tags = ["Auth"];
 
 export const list = createRoute({
   path: "/users",
@@ -13,8 +15,8 @@ export const list = createRoute({
   tags,
   responses: {
     [HttpStatusCodes.OK]: jsonContent(
-        z.array(selectUsersSchema),
-        "The list of users",
+      z.array(selectUsersSchema),
+      "The list of users",
     ),
   },
 });
@@ -25,61 +27,60 @@ export const register = createRoute({
   tags,
   request: {
     body: jsonContentRequired(
-        insertUsersSchema,
-        "The user to register",
+      insertUsersSchema,
+      "The user to register",
     ),
   },
   responses: {
     [HttpStatusCodes.OK]: jsonContent(
-        selectUsersSchema,
-        "The created user"
+      selectUsersSchema,
+      "The created user",
     ),
     [HttpStatusCodes.UNPROCESSABLE_ENTITY]: jsonContent(
-        createErrorSchema(insertUsersSchema),
-        "The validation error(s)",
+      createErrorSchema(insertUsersSchema),
+      "The validation error(s)",
     ),
-  }
-})
+  },
+});
 
 const ErrorSchema = z.object({
   message: z.string(),
 });
 
-
-export const login= createRoute({
+export const login = createRoute({
   path: "/login",
   method: "post",
   tags,
   request: {
     body: jsonContentRequired(
-        loginUserSchema,
-        "The user to login",
+      loginUserSchema,
+      "The user to login",
     ),
   },
   responses: {
     [HttpStatusCodes.OK]: jsonContent(
-        z.object({
-          user: selectUsersSchema,
-          token: z.string()
-        }),
-        "Login success"
+      z.object({
+        user: selectUsersSchema,
+        token: z.string(),
+      }),
+      "Login success",
     ),
     [HttpStatusCodes.NOT_FOUND]: jsonContent(
-        notFoundSchema,
-        "Not found"
+      notFoundSchema,
+      "Not found",
     ),
     [HttpStatusCodes.UNAUTHORIZED]: jsonContent(
-        z.object({
-          message: z.string(),
-        }),
-        "Invalid password"
+      z.object({
+        message: z.string(),
+      }),
+      "Invalid password",
     ),
     [HttpStatusCodes.UNPROCESSABLE_ENTITY]: jsonContent(
-        createErrorSchema(loginUserSchema),
-        "The validation error(s)",
+      createErrorSchema(loginUserSchema),
+      "The validation error(s)",
     ),
-  }
-})
+  },
+});
 
 export type ListRoute = typeof list;
 export type RegisterRoute = typeof register;
