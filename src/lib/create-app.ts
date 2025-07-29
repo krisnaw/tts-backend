@@ -7,8 +7,7 @@ import { defaultHook } from "stoker/openapi";
 import { pinoLoggers } from "@/middlewares/pino-loggers";
 
 import type { AppBindings, AppOpenAPI } from "./types";
-
-;
+import { cors } from 'hono/cors'
 
 expand(config());
 
@@ -23,6 +22,7 @@ export default function createApp() {
   const app = createRouter();
 
   app.use(pinoLoggers());
+  app.use('*', cors())
 
   app.notFound(notFound);
   app.onError(onError);
