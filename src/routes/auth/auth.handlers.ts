@@ -6,8 +6,8 @@ import * as HttpStatusCodes from "stoker/http-status-codes";
 import bcrypt from "bcrypt"
 import * as HttpStatusPhrases from "stoker/http-status-phrases";
 import {sign} from 'hono/jwt'
+import {JWT_SECRET} from "@/lib/constants";
 
-const JWT_SECRET = 'secret'; // Replace with a strong, random secret
 
 export const list: AppRouteHandler<ListRoute> = async (c) => {
   const users = await db.query.users.findMany();

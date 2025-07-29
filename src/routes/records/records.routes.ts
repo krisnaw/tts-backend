@@ -7,11 +7,13 @@ import {createErrorSchema, IdParamsSchema} from "stoker/openapi/schemas";
 import {notFoundSchema} from "@/lib/constants";
 
 const tags = ['Records']
+const security = [{ BearerAuth: [] }]
 
 export const listRecords = createRoute({
   path: '/records',
   method: 'get',
   tags,
+  security: security,
   responses: {
     [HttpStatusCodes.OK]: jsonContent(
         z.array(selectRecordsSchema),
@@ -24,6 +26,7 @@ export const create = createRoute({
   path: "/records",
   method: "post",
   tags,
+  security: security,
   request: {
     body: jsonContentRequired(
         insertRecordsSchema,
@@ -46,6 +49,7 @@ export const remove = createRoute({
   path: "/records/{id}",
   method: "delete",
   tags,
+  security: security,
   request: {
     params: IdParamsSchema,
   },
