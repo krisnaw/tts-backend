@@ -34,7 +34,21 @@ export const register: AppRouteHandler<RegisterRoute> = async (c) => {
     password: hashedPassword,
   }).returning();
 
-  return c.json(inserted, HttpStatusCodes.OK);
+  const payload = {
+    sub: inserted.email,
+    role: "user",
+    exp: Math.floor(Date.now() / 1000) + 60 * 5, // 5 minutes
+  };
+
+  // Sign the JWT with the secret key
+  const token = await sign(payload, JWT_SECRET);
+
+  const responses = {
+    user: inserted,
+    token,
+  };
+
+  return c.json(responses, HttpStatusCodes.OK);
 };
 
 export const login: AppRouteHandler<LoginRoute> = async (c) => {

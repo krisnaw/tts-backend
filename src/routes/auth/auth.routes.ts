@@ -33,7 +33,10 @@ export const register = createRoute({
   },
   responses: {
     [HttpStatusCodes.OK]: jsonContent(
-      selectUsersSchema,
+        z.object({
+          user: selectUsersSchema,
+          token: z.string(),
+        }),
       "The created user",
     ),
     [HttpStatusCodes.UNPROCESSABLE_ENTITY]: jsonContent(
