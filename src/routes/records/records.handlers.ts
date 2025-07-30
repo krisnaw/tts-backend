@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import {asc, desc, eq} from "drizzle-orm";
 import * as HttpStatusCodes from "stoker/http-status-codes";
 
 import type { AppRouteHandler } from "@/lib/types";
@@ -14,20 +14,23 @@ import { records } from "@/db/schema";
 import * as HttpStatusPhrases from "stoker/http-status-phrases";
 
 export const listRecords: AppRouteHandler<ListRecordsRoute> = async (c) => {
-  const records = await db.query.records.findMany();
-  return c.json(records);
+  const items = await db.query.records.findMany({
+    orderBy: [desc(records.createdAt)],
+  });
+  return c.json(items);
 };
 
 export const getRecordByUserId: AppRouteHandler<GetRecordsByUserIdRoute> = async (c) => {
   const {id} = await c.req.valid("param");
 
-  const records = await db.query.records.findMany({
+  const items = await db.query.records.findMany({
+    orderBy: [desc(records.createdAt)],
     where(fields, operators) {
       return operators.eq(fields.userId, id);
     },
   });
 
-  if (!records) {
+  if (!items) {
     return c.json(
         {
           message: HttpStatusPhrases.NOT_FOUND,
@@ -35,7 +38,7 @@ export const getRecordByUserId: AppRouteHandler<GetRecordsByUserIdRoute> = async
         HttpStatusCodes.NOT_FOUND
     )
   }
-  return c.json(records, HttpStatusCodes.OK)
+  return c.json(items, HttpStatusCodes.OK)
 }
 
 export const createRecords: AppRouteHandler<CreateRecordsRoute> = async (c) => {

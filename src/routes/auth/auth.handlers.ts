@@ -10,8 +10,6 @@ import db from "@/db";
 import { users } from "@/db/schema";
 import { JWT_SECRET } from "@/lib/constants";
 
-const EXP_TIME = Math.floor(Date.now() / 1000) + (60 * 60);
-
 export const list: AppRouteHandler<ListRoute> = async (c) => {
   const users = await db.query.users.findMany({
     columns: {
@@ -36,7 +34,7 @@ export const register: AppRouteHandler<RegisterRoute> = async (c) => {
     password: hashedPassword,
   }).returning();
 
-  const payload = {sub: inserted.email, role: "user", exp: EXP_TIME}
+  const payload = {sub: inserted.email, role: "user", exp: Math.floor(Date.now() / 1000) + (60 * 60)}
 
   // Sign the JWT with the secret key
   const token = await sign(payload, JWT_SECRET);
@@ -78,7 +76,7 @@ export const login: AppRouteHandler<LoginRoute> = async (c) => {
     );
   }
 
-  const payload = {sub: user.email, role: "user", exp: EXP_TIME};
+  const payload = {sub: user.email, role: "user", exp: Math.floor(Date.now() / 1000) + (60 * 60)};
 
   // Sign the JWT with the secret key
   const token = await sign(payload, JWT_SECRET);
