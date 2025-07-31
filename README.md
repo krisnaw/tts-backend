@@ -3,9 +3,9 @@
 - [] Login user Route
 - [] API documentation
 - [] JWT Auth
-- [] Create Record route
+- [] Create Record route: Store users’ conversion settings in a database.
 - [] Remove Record Route
-- [] Select / GET record by User ID route
+- [] Select / GET record by User ID route: Retrieve users’ conversion history
 
 # TTS API
 
