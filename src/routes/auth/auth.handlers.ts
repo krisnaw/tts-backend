@@ -4,7 +4,7 @@ import * as HttpStatusCodes from "stoker/http-status-codes";
 import * as HttpStatusPhrases from "stoker/http-status-phrases";
 
 import type { AppRouteHandler } from "@/lib/types";
-import type {ListRoute, LoginRoute, RegisterRoute, SamplePostRoute} from "@/routes/auth/auth.routes";
+import type {ListRoute, LoginRoute, RegisterRoute} from "@/routes/auth/auth.routes";
 
 import db from "@/db";
 import { users } from "@/db/schema";
@@ -88,11 +88,3 @@ export const login: AppRouteHandler<LoginRoute> = async (c) => {
 
   return c.json(responses, HttpStatusCodes.OK);
 };
-
-export const sample: AppRouteHandler<SamplePostRoute> = async (c) => {
-  const data = await c.req.json();
-
-  console.log(data.email)
-
-  return c.body(null, HttpStatusCodes.NO_CONTENT);
-}

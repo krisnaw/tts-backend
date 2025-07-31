@@ -81,28 +81,6 @@ export const login = createRoute({
   },
 });
 
-const sampleSchema = z.object({
-  email: z.string(),
-});
-
-export const samplePost = createRoute({
-  path: "/samplepost",
-  method: "post",
-  tags,
-  request: {
-    body: jsonContentRequired(
-        sampleSchema,
-        "The user to login",
-    ),
-  },
-  responses: {
-    [HttpStatusCodes.NO_CONTENT]: {
-      description: "Task deleted",
-    },
-  }
-})
-
 export type ListRoute = typeof list;
 export type RegisterRoute = typeof register;
 export type LoginRoute = typeof login;
-export type SamplePostRoute = typeof samplePost;
