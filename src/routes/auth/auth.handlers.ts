@@ -94,31 +94,5 @@ export const sample: AppRouteHandler<SamplePostRoute> = async (c) => {
 
   console.log(data.email)
 
-  const user = await db.query.users.findFirst({
-    where: (users, { eq }) => (eq(users.email, "krisna@mail.com")),
-  });
-
-  if (!user) {
-    return c.json(
-        {
-          message: HttpStatusPhrases.NOT_FOUND,
-        },
-        HttpStatusCodes.NOT_FOUND,
-    );
-  }
-
-  // Hashing
-  const isPasswordValid = bcrypt.compare("qwerty57", user.password);
-
-  const payload = {sub: user.email, role: "user", exp: Math.floor(Date.now() / 1000) + (60 * 60)};
-
-  // JWT sign
-  const token = await sign(payload, JWT_SECRET);
-
-
-  const { password, ...userWithoutPassword } = user
-
-  const responses = {user: userWithoutPassword, token: token};
-
-  return c.json(responses, HttpStatusCodes.OK);
+  return c.body(null, HttpStatusCodes.NO_CONTENT);
 }

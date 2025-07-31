@@ -81,30 +81,24 @@ export const login = createRoute({
   },
 });
 
+const sampleSchema = z.object({
+  email: z.string(),
+});
+
 export const samplePost = createRoute({
   path: "/samplepost",
   method: "post",
   tags,
   request: {
     body: jsonContentRequired(
-        loginUserSchema,
+        sampleSchema,
         "The user to login",
     ),
   },
   responses: {
-
-    [HttpStatusCodes.OK]: jsonContent(
-        z.object({
-          user: selectUsersSchema,
-          token: z.string(),
-        }),
-        "Login success",
-    ),
-
-    [HttpStatusCodes.NOT_FOUND]: jsonContent(
-        notFoundSchema,
-        "Task not found",
-    ),
+    [HttpStatusCodes.NO_CONTENT]: {
+      description: "Task deleted",
+    },
   }
 })
 
