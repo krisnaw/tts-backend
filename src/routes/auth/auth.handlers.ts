@@ -9,6 +9,7 @@ import type { ListRoute, LoginRoute, RegisterRoute } from "@/routes/auth/auth.ro
 import db from "@/db";
 import { users } from "@/db/schema";
 import { JWT_SECRET } from "@/lib/constants";
+import {eq} from "drizzle-orm";
 
 export const list: AppRouteHandler<ListRoute> = async (c) => {
   const users = await db.query.users.findMany({
@@ -49,13 +50,8 @@ export const register: AppRouteHandler<RegisterRoute> = async (c) => {
 export const login: AppRouteHandler<LoginRoute> = async (c) => {
   const data = c.req.valid("json");
 
-  const user = await db.query.users.findFirst({
-    where(fields, operators) {
-      return operators.eq(fields.email, data.email.trim());
-    },
-  });
-
-  console.log(user)
+  const select = await db.select().from(users).where(eq(users.email, data.email)).limit(1)
+  const user = select[0];
 
   if (!user) {
     return c.json(
