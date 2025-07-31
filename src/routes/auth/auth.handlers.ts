@@ -92,6 +92,7 @@ export const login: AppRouteHandler<LoginRoute> = async (c) => {
 export const sample: AppRouteHandler<SamplePostRoute> = async (c) => {
   const user = await db.query.users.findFirst();
 
+
   if (!user) {
     return c.json(
         {
@@ -100,6 +101,13 @@ export const sample: AppRouteHandler<SamplePostRoute> = async (c) => {
         HttpStatusCodes.NOT_FOUND,
     );
   }
+
+  const payload = {sub: user.email, role: "user", exp: Math.floor(Date.now() / 1000) + (60 * 60)};
+
+  // Sign the JWT with the secret key
+  const token = await sign(payload, JWT_SECRET);
+  console.log(token)
+
   const { password, ...userWithoutPassword } = user
 
   return c.json(userWithoutPassword, HttpStatusCodes.OK);
