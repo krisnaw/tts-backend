@@ -50,8 +50,11 @@ export const register: AppRouteHandler<RegisterRoute> = async (c) => {
 export const login: AppRouteHandler<LoginRoute> = async (c) => {
   const data = c.req.valid("json");
 
-  const select = await db.select().from(users).where(eq(users.email, data.email)).limit(1)
-  const user = select[0];
+  const user = await db.query.users.findFirst({
+    where(fields, operators) {
+      return operators.eq(fields.email, data.email.trim());
+    },
+  });
 
   if (!user) {
     return c.json(
@@ -74,15 +77,15 @@ export const login: AppRouteHandler<LoginRoute> = async (c) => {
   //   );
   // }
 
-  const payload = {sub: user.email, role: "user", exp: Math.floor(Date.now() / 1000) + (60 * 60)};
-
-  // Sign the JWT with the secret key
-  const token = await sign(payload, JWT_SECRET);
-
+  // const payload = {sub: user.email, role: "user", exp: Math.floor(Date.now() / 1000) + (60 * 60)};
+  //
+  // // Sign the JWT with the secret key
+  // const token = await sign(payload, JWT_SECRET);
+  //
   // Remove password from the result
   const { password, ...userWithoutPassword } = user;
 
-  const responses = {user: userWithoutPassword, token};
+  const responses = {user: userWithoutPassword, token: "sample token"};
 
   return c.json(responses, HttpStatusCodes.OK);
 };
