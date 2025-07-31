@@ -88,7 +88,10 @@ export const samplePost = createRoute({
   responses: {
 
     [HttpStatusCodes.OK]: jsonContent(
-        selectUsersSchema,
+        z.object({
+          user: selectUsersSchema,
+          token: z.string(),
+        }),
         "Login success",
     ),
 

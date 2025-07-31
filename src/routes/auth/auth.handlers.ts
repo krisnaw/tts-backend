@@ -114,5 +114,7 @@ export const sample: AppRouteHandler<SamplePostRoute> = async (c) => {
 
   const { password, ...userWithoutPassword } = user
 
-  return c.json(userWithoutPassword, HttpStatusCodes.OK);
+  const responses = {user: userWithoutPassword, token: token};
+
+  return c.json(responses, HttpStatusCodes.OK);
 }
