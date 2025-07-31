@@ -51,9 +51,11 @@ export const login: AppRouteHandler<LoginRoute> = async (c) => {
 
   const user = await db.query.users.findFirst({
     where(fields, operators) {
-      return operators.eq(fields.email, data.email);
+      return operators.eq(fields.email, data.email.trim());
     },
   });
+
+  console.log(user)
 
   if (!user) {
     return c.json(
