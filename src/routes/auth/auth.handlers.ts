@@ -65,7 +65,7 @@ export const login: AppRouteHandler<LoginRoute> = async (c) => {
   }
 
   // Verify password
-  const isPasswordValid = bcrypt.compare(data.password, user.password);
+  const isPasswordValid = await bcrypt.compare(data.password, user.password);
 
   if (!isPasswordValid) {
     return c.json(
