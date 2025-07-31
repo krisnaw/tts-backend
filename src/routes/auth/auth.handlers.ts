@@ -1,4 +1,5 @@
 import { sign } from "hono/jwt";
+import bcrypt from "bcrypt";
 import * as HttpStatusCodes from "stoker/http-status-codes";
 import * as HttpStatusPhrases from "stoker/http-status-phrases";
 
@@ -8,8 +9,6 @@ import type { ListRoute, LoginRoute, RegisterRoute } from "@/routes/auth/auth.ro
 import db from "@/db";
 import { users } from "@/db/schema";
 import { JWT_SECRET } from "@/lib/constants";
-import { scrypt, randomBytes, timingSafeEqual } from 'node:crypto';
-import { promisify } from 'node:util';
 
 export const list: AppRouteHandler<ListRoute> = async (c) => {
   const users = await db.query.users.findMany({
@@ -23,33 +22,12 @@ export const list: AppRouteHandler<ListRoute> = async (c) => {
   });
   return c.json(users);
 };
-const scryptAsync = promisify(scrypt);
-
-async function hashPassword(password: string) {
-  const salt = randomBytes(32);
-  const derivedKey = await scryptAsync(password, salt, 64);
-  // @ts-ignore
-  return salt.toString('hex') + ':' + derivedKey.toString('hex');
-}
-
-// Verify a password
-async function verifyPassword(password: string, hash: string) {
-  const [saltHex, keyHex] = hash.split(':');
-  const salt = Buffer.from(saltHex, 'hex');
-  const originalKey = Buffer.from(keyHex, 'hex');
-  const derivedKey = await scryptAsync(password, salt, 64);
-
-  // @ts-ignore
-  return timingSafeEqual(originalKey, derivedKey);
-}
 
 export const register: AppRouteHandler<RegisterRoute> = async (c) => {
   const user = c.req.valid("json");
 
-  // const saltRounds = 10;
-  // const hashedPassword = await bcrypt.hash(user.password, saltRounds);
-
-  const hashedPassword = await hashPassword(user.password);
+  const saltRounds = 10;
+  const hashedPassword = await bcrypt.hash(user.password, saltRounds);
 
   const [inserted] = await db.insert(users).values({
     ...user,
@@ -87,8 +65,7 @@ export const login: AppRouteHandler<LoginRoute> = async (c) => {
   }
 
   // Verify password
-  // const isPasswordValid = bcrypt.compare(data.password, user.password);
-  const isPasswordValid = verifyPassword(data.password, user.password)
+  const isPasswordValid = bcrypt.compare(data.password, user.password);
 
   if (!isPasswordValid) {
     return c.json(
@@ -99,15 +76,15 @@ export const login: AppRouteHandler<LoginRoute> = async (c) => {
     );
   }
 
-  const payload = {sub: user.email, role: "user", exp: Math.floor(Date.now() / 1000) + (60 * 60)};
-
-  // Sign the JWT with the secret key
-  const token = await sign(payload, JWT_SECRET);
+  // const payload = {sub: user.email, role: "user", exp: Math.floor(Date.now() / 1000) + (60 * 60)};
+  //
+  // // Sign the JWT with the secret key
+  // const token = await sign(payload, JWT_SECRET);
 
   // Remove password from the result
   const { password, ...userWithoutPassword } = user;
 
-  const responses = {user: userWithoutPassword, token: token};
+  const responses = {user: userWithoutPassword, token: 'sample token'};
 
   return c.json(responses, HttpStatusCodes.OK);
 };
