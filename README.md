@@ -1,3 +1,12 @@
+## TODO FEATURE
+- [✅] Create/Register user Route
+- [] Login user Route
+- [] API documentation
+- [] JWT Auth
+- [] Create Record route
+- [] Remove Record Route
+- [] Select / GET record by User ID route
+
 # TTS API
 
 This is a Text-to-Speech API built with Hono, Drizzle ORM, and TypeScript.
