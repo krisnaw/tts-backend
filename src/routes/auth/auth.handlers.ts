@@ -49,16 +49,11 @@ export const register: AppRouteHandler<RegisterRoute> = async (c) => {
 export const login: AppRouteHandler<LoginRoute> = async (c) => {
   const data = c.req.valid("json");
 
-  // const user = await db.query.users.findFirst({
-  //   where(fields, operators) {
-  //     return operators.eq(fields.email, data.email.trim());
-  //   },
-  // });
-
   const user = await db.query.users.findFirst({
-    where: (users, { eq }) => (eq(users.email, data.email.trim())),
+    where(fields, operators) {
+      return operators.eq(fields.email, data.email.trim());
+    },
   });
-
 
   if (!user) {
     return c.json(
@@ -95,11 +90,10 @@ export const login: AppRouteHandler<LoginRoute> = async (c) => {
 };
 
 export const sample: AppRouteHandler<SamplePostRoute> = async (c) => {
-  const data = await db.query.users.findMany({
+  const user = await db.query.users.findFirst({
     where: (users, { eq }) => (eq(users.email, "krisna@mail.com")),
   });
 
-  const user = data[0];
 
   if (!user) {
     return c.json(
