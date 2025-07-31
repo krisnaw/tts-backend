@@ -1,11 +1,11 @@
 ## TODO FEATURE
 - [✅] Create/Register user Route
-- [] Login user Route
-- [] API documentation
-- [] JWT Auth
-- [] Create Record route: Store users’ conversion settings in a database.
-- [] Remove Record Route
-- [] Select / GET record by User ID route: Retrieve users’ conversion history
+- [✅] Login user Route
+- [✅] API documentation
+- [✅] JWT Auth
+- [✅] Create Record route: Store users’ conversion settings in a database.
+- [✅] Remove Record Route
+- [✅] Select / GET record by User ID route: Retrieve users’ conversion history
 
 # TTS API
 
