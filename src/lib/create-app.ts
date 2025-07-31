@@ -22,7 +22,14 @@ export default function createApp() {
   const app = createRouter();
 
   app.use(pinoLoggers());
-  // app.use('*', cors())
+  app.use('*', cors(
+      {
+        origin: ["https://tts-frontend-green.vercel.app/", "http://localhost:5173/"],
+        allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+        allowHeaders: ['Content-Type', 'Authorization'],
+        credentials: true,
+      }
+  ))
 
   app.notFound(notFound);
   app.onError(onError);
