@@ -22,7 +22,7 @@ export default function createApp() {
   const app = createRouter();
 
   app.use(pinoLoggers());
-  app.use('*', cors())
+  // app.use('*', cors())
 
   app.notFound(notFound);
   app.onError(onError);
