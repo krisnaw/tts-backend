@@ -102,11 +102,9 @@ export const sample: AppRouteHandler<SamplePostRoute> = async (c) => {
     );
   }
 
-  const payload = {sub: user.email, role: "user", exp: Math.floor(Date.now() / 1000) + (60 * 60)};
-
-  // Sign the JWT with the secret key
-  const token = await sign(payload, JWT_SECRET);
-  console.log(token)
+  // Verify password
+  const isPasswordValid = bcrypt.compare("qwerty57", user.password);
+  console.log(isPasswordValid)
 
   const { password, ...userWithoutPassword } = user
 
