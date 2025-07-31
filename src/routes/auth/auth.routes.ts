@@ -81,6 +81,25 @@ export const login = createRoute({
   },
 });
 
+export const samplePost = createRoute({
+  path: "/samplepost",
+  method: "post",
+  tags,
+  responses: {
+
+    [HttpStatusCodes.OK]: jsonContent(
+        selectUsersSchema,
+        "Login success",
+    ),
+
+    [HttpStatusCodes.NOT_FOUND]: jsonContent(
+        notFoundSchema,
+        "Task not found",
+    ),
+  }
+})
+
 export type ListRoute = typeof list;
 export type RegisterRoute = typeof register;
 export type LoginRoute = typeof login;
+export type SamplePostRoute = typeof samplePost;

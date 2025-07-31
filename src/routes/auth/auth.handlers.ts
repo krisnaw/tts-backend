@@ -4,7 +4,7 @@ import * as HttpStatusCodes from "stoker/http-status-codes";
 import * as HttpStatusPhrases from "stoker/http-status-phrases";
 
 import type { AppRouteHandler } from "@/lib/types";
-import type { ListRoute, LoginRoute, RegisterRoute } from "@/routes/auth/auth.routes";
+import type {ListRoute, LoginRoute, RegisterRoute, SamplePostRoute} from "@/routes/auth/auth.routes";
 
 import db from "@/db";
 import { users } from "@/db/schema";
@@ -88,3 +88,19 @@ export const login: AppRouteHandler<LoginRoute> = async (c) => {
 
   return c.json(responses, HttpStatusCodes.OK);
 };
+
+export const sample: AppRouteHandler<SamplePostRoute> = async (c) => {
+  const user = await db.query.users.findFirst();
+
+  if (!user) {
+    return c.json(
+        {
+          message: HttpStatusPhrases.NOT_FOUND,
+        },
+        HttpStatusCodes.NOT_FOUND,
+    );
+  }
+  const { password, ...userWithoutPassword } = user
+
+  return c.json(userWithoutPassword, HttpStatusCodes.OK);
+}
