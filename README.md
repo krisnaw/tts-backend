@@ -6,6 +6,7 @@
 - [✅] Create Record route: Store users’ conversion settings in a database.
 - [✅] Remove Record Route
 - [✅] Select / GET record by User ID route: Retrieve users’ conversion history
+- [] Select / GET record by ID
 
 # TTS API
 
