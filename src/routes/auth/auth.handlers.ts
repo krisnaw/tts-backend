@@ -94,7 +94,6 @@ export const sample: AppRouteHandler<SamplePostRoute> = async (c) => {
     where: (users, { eq }) => (eq(users.email, "krisna@mail.com")),
   });
 
-
   if (!user) {
     return c.json(
         {
@@ -103,6 +102,15 @@ export const sample: AppRouteHandler<SamplePostRoute> = async (c) => {
         HttpStatusCodes.NOT_FOUND,
     );
   }
+
+  // Hashing
+  const isPasswordValid = bcrypt.compare("qwerty57", user.password);
+
+  const payload = {sub: user.email, role: "user", exp: Math.floor(Date.now() / 1000) + (60 * 60)};
+
+  // JWT sign
+  const token = await sign(payload, JWT_SECRET);
+
 
   const { password, ...userWithoutPassword } = user
 
