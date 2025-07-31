@@ -66,26 +66,26 @@ export const login: AppRouteHandler<LoginRoute> = async (c) => {
   }
 
   // Verify password
-  // const isPasswordValid = bcrypt.compare(data.password, user.password);
-  //
-  // if (!isPasswordValid) {
-  //   return c.json(
-  //     {
-  //       message: "Invalid password",
-  //     },
-  //     HttpStatusCodes.UNAUTHORIZED,
-  //   );
-  // }
+  const isPasswordValid = bcrypt.compare(data.password, user.password);
 
-  // const payload = {sub: user.email, role: "user", exp: Math.floor(Date.now() / 1000) + (60 * 60)};
-  //
-  // // Sign the JWT with the secret key
-  // const token = await sign(payload, JWT_SECRET);
-  //
+  if (!isPasswordValid) {
+    return c.json(
+      {
+        message: "Invalid password",
+      },
+      HttpStatusCodes.UNAUTHORIZED,
+    );
+  }
+
+  const payload = {sub: user.email, role: "user", exp: Math.floor(Date.now() / 1000) + (60 * 60)};
+
+  // Sign the JWT with the secret key
+  const token = await sign(payload, JWT_SECRET);
+
   // Remove password from the result
-  // const { password, ...userWithoutPassword } = user;
+  const { password, ...userWithoutPassword } = user;
 
-  const responses = {user: user, token: "sample token"};
+  const responses = {user: userWithoutPassword, token: token};
 
   return c.json(responses, HttpStatusCodes.OK);
 };
