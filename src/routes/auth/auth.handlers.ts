@@ -90,6 +90,9 @@ export const login: AppRouteHandler<LoginRoute> = async (c) => {
 };
 
 export const sample: AppRouteHandler<SamplePostRoute> = async (c) => {
+  const data = c.req.valid("json");
+  console.log(data.email)
+
   const user = await db.query.users.findFirst({
     where: (users, { eq }) => (eq(users.email, "krisna@mail.com")),
   });

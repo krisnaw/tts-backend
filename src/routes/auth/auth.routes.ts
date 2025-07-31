@@ -85,6 +85,12 @@ export const samplePost = createRoute({
   path: "/samplepost",
   method: "post",
   tags,
+  request: {
+    body: jsonContentRequired(
+        loginUserSchema,
+        "The user to login",
+    ),
+  },
   responses: {
 
     [HttpStatusCodes.OK]: jsonContent(
