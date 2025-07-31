@@ -90,8 +90,11 @@ export const login: AppRouteHandler<LoginRoute> = async (c) => {
 };
 
 export const sample: AppRouteHandler<SamplePostRoute> = async (c) => {
-  const user = await db.query.users.findFirst();
+  const data = await db.query.users.findMany({
+    where: (users, { eq }) => (eq(users.email, "krisna@mail.com")),
+  });
 
+  const user = data[0];
 
   if (!user) {
     return c.json(
@@ -101,10 +104,6 @@ export const sample: AppRouteHandler<SamplePostRoute> = async (c) => {
         HttpStatusCodes.NOT_FOUND,
     );
   }
-
-  // Verify password
-  const isPasswordValid = bcrypt.compare("qwerty57", user.password);
-  console.log(isPasswordValid)
 
   const { password, ...userWithoutPassword } = user
 
