@@ -83,9 +83,9 @@ export const login: AppRouteHandler<LoginRoute> = async (c) => {
   // const token = await sign(payload, JWT_SECRET);
   //
   // Remove password from the result
-  const { password, ...userWithoutPassword } = user;
+  // const { password, ...userWithoutPassword } = user;
 
-  const responses = {user: userWithoutPassword, token: "sample token"};
+  const responses = {user: user, token: "sample token"};
 
   return c.json(responses, HttpStatusCodes.OK);
 };
