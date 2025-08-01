@@ -10,7 +10,12 @@
 
 # Explanation and Trade-off
 
-
+#### Hono.js: I use hono because folowing reason
+- I use Hono.js because it is an ultrafast and lightweight framework for building web services.
+- It has many built-in features for creating APIs, such as CORS, JWT authentication, and middleware.
+- It has excellent integration with third-party modules like Zod and OpenAPI specs, which enables type safety and API documentation.
+- It can be deployed everywhere.
+ 
 
 # TTS API
 
@@ -50,6 +55,26 @@ npm run dev
 ```
 
 The application will be running at `http://localhost:3000`.
+
+### Database Migrations
+
+When you change the database schema, you need to generate a new migration file and apply it to the database.
+
+**Generate a new migration:**
+
+```bash
+npm run db:generate
+```
+
+This will create a new SQL migration file in the `src/db/migrations` directory.
+
+**Apply migrations:**
+
+```bash
+npm run db:migrate
+```
+
+This will apply any pending migrations to the database.
 
 ## API Documentation
 
