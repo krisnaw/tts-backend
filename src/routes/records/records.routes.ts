@@ -69,7 +69,7 @@ export const getRecordsById = createRoute({
   responses: {
     [HttpStatusCodes.OK]: jsonContent(
         selectRecordsSchema,
-        "List of records belong to user"
+        "Record"
     ),
     [HttpStatusCodes.NOT_FOUND]: jsonContent(
         notFoundSchema,
