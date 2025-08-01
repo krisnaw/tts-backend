@@ -24,6 +24,7 @@ router.openAPIRegistry.registerComponent("securitySchemes", "Bearer", {
 router
     .openapi(routes.listRecords, handlers.listRecords)
     .openapi(routes.getRecordsByUserId, handlers.getRecordByUserId)
+    .openapi(routes.getRecordsById, handlers.getRecordById)
     .openapi(routes.create, handlers.createRecords)
     .openapi(routes.remove, handlers.removeRecords);
 

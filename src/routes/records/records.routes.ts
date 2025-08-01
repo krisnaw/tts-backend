@@ -23,8 +23,44 @@ export const listRecords = createRoute({
   },
 });
 
+
+const userIdSchema = z.object({
+  userId: z
+      .string()
+      .min(1)
+      .openapi({
+        param: {
+          name: 'userId',
+          in: 'path',
+        },
+        example: '1',
+      }),
+})
+
+
 export const getRecordsByUserId = createRoute({
-  path: "/records/{id}",
+  path: "/records/{userId}",
+  method: "get",
+  tags,
+  request: {
+    params: userIdSchema,
+  },
+  responses: {
+    [HttpStatusCodes.OK]: jsonContent(
+        z.array(selectRecordsSchema),
+        "List of records belong to user"
+    ),
+    [HttpStatusCodes.NOT_FOUND]: jsonContent(
+        notFoundSchema,
+        "Record not found",
+    ),
+  }
+})
+
+
+
+export const getRecordsById = createRoute({
+  path: "/record/{id}",
   method: "get",
   tags,
   request: {
@@ -32,7 +68,7 @@ export const getRecordsByUserId = createRoute({
   },
   responses: {
     [HttpStatusCodes.OK]: jsonContent(
-        z.array(selectRecordsSchema),
+        selectRecordsSchema,
         "List of records belong to user"
     ),
     [HttpStatusCodes.NOT_FOUND]: jsonContent(
@@ -92,5 +128,6 @@ export const remove = createRoute({
 
 export type ListRecordsRoute = typeof listRecords;
 export type GetRecordsByUserIdRoute = typeof getRecordsByUserId;
+export type GetRecordsByIdRoute = typeof getRecordsById;
 export type CreateRecordsRoute = typeof create;
 export type RemoveRecordsRoute = typeof remove;

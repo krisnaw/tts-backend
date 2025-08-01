@@ -3,7 +3,7 @@ import * as HttpStatusCodes from "stoker/http-status-codes";
 
 import type { AppRouteHandler } from "@/lib/types";
 import {
-  CreateRecordsRoute,
+  CreateRecordsRoute, GetRecordsByIdRoute,
   GetRecordsByUserIdRoute,
   ListRecordsRoute,
   RemoveRecordsRoute
@@ -21,12 +21,12 @@ export const listRecords: AppRouteHandler<ListRecordsRoute> = async (c) => {
 };
 
 export const getRecordByUserId: AppRouteHandler<GetRecordsByUserIdRoute> = async (c) => {
-  const {id} = await c.req.valid("param");
+  const {userId} = await c.req.valid("param");
 
   const items = await db.query.records.findMany({
     orderBy: [desc(records.createdAt)],
     where(fields, operators) {
-      return operators.eq(fields.userId, id);
+      return operators.eq(records.userId, Number(userId))
     },
   });
 
@@ -39,6 +39,27 @@ export const getRecordByUserId: AppRouteHandler<GetRecordsByUserIdRoute> = async
     )
   }
   return c.json(items, HttpStatusCodes.OK)
+}
+
+export const getRecordById: AppRouteHandler<GetRecordsByIdRoute> = async (c) => {
+  const {id} = await c.req.valid("param");
+
+  const record = await db.query.records.findFirst({
+    orderBy: [desc(records.createdAt)],
+    where(fields, operators) {
+      return operators.eq(fields.id, id);
+    },
+  });
+
+  if (!record) {
+    return c.json(
+        {
+          message: HttpStatusPhrases.NOT_FOUND,
+        },
+        HttpStatusCodes.NOT_FOUND
+    )
+  }
+  return c.json(record, HttpStatusCodes.OK)
 }
 
 export const createRecords: AppRouteHandler<CreateRecordsRoute> = async (c) => {
