@@ -117,8 +117,3 @@ src/
         ├───records.index.ts
         └───records.routes.ts
 ```
-
-## TODO
-
-- [ ] Setup Deployment
-- [ ] Setup DB
