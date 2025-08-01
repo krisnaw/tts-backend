@@ -8,6 +8,10 @@
 - [✅] Select / GET record by User ID route: Retrieve users’ conversion history
 - [✅] Select / GET record by ID
 
+# Explanation and Trade-off
+
+
+
 # TTS API
 
 This is a Text-to-Speech API built with Hono, Drizzle ORM, and TypeScript.
@@ -30,7 +34,9 @@ This is a Text-to-Speech API built with Hono, Drizzle ORM, and TypeScript.
     npm install
     ```
 3.  Create a `.env` file from the `.env.example` file and fill in the required environment variables.
-
+    ```bash
+    cp .env.example .env
+    ```
 ### Environment Variables
 
 The following environment variables are required:
