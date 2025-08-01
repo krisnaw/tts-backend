@@ -24,7 +24,7 @@ export default function createApp() {
   app.use(pinoLoggers());
   app.use('/*', cors(
       {
-        origin: ["https://tts-frontend-green.vercel.app/*", "http://localhost:5173", "*.vercel.app/*"],
+        origin: ["https://tts-frontend-green.vercel.app", "http://localhost:5173", "*.vercel.app"],
         allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
         allowHeaders: ['Content-Type', 'Authorization'],
         credentials: true,
